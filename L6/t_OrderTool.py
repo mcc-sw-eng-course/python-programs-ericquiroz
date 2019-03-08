@@ -276,6 +276,246 @@ class TestOrderTool(unittest.TestCase):
 
         self.assertTrue(True)
 
+    def test_execute_quick_sort(self):
+        filename = "correct.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_quick_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        self.assertEqual(fileline, "0,7,11,23,43,45,83")
+
+    def test_execute_quick_sort_float(self):
+        filename = "correct_float.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_quick_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        self.assertEqual(fileline, "0.1,7.23,11.432,23.43,43.1,45.4,83.43")
+
+    def test_execute_quick_sort_negative(self):
+        filename = "correct_negative.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_quick_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        self.assertEqual(fileline, "-89.82,-43,-0.1,0,22,23.63,41.001,45")
+
+    def test_execute_quick_sort_10k(self):
+        filename = "correct_10000.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_quick_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        list = fileline.split(',')
+        prev = float("-inf")
+        for item in list:
+            if prev <= float(item):
+                prev = float(item)
+            else:
+                self.assertTrue(False)
+
+        self.assertTrue(True)
+
+    def test_execute_quick_sort_100k(self):
+        filename = "correct_100000.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_quick_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        list = fileline.split(',')
+        prev = float("-inf")
+        for item in list:
+            if prev <= float(item):
+                prev = float(item)
+            else:
+                self.assertTrue(False)
+
+        self.assertTrue(True)
+
+    def test_execute_quick_sort_1m(self):
+        filename = "correct_1M.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_quick_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        list = fileline.split(',')
+        prev = float("-inf")
+        for item in list:
+            if prev <= float(item):
+                prev = float(item)
+            else:
+                self.assertTrue(False)
+
+        self.assertTrue(True)
+
+    def test_execute_heap_sort(self):
+        filename = "correct.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_heap_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        self.assertEqual(fileline, "0,7,11,23,43,45,83")
+
+    def test_execute_heap_sort_float(self):
+        filename = "correct_float.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_heap_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        self.assertEqual(fileline, "0.1,7.23,11.432,23.43,43.1,45.4,83.43")
+
+    def test_execute_heap_sort_negative(self):
+        filename = "correct_negative.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_heap_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        self.assertEqual(fileline, "-89.82,-43,-0.1,0,22,23.63,41.001,45")
+
+    def test_execute_heap_sort_10k(self):
+        filename = "correct_10000.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_heap_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        list = fileline.split(',')
+        prev = float("-inf")
+        for item in list:
+            if prev <= float(item):
+                prev = float(item)
+            else:
+                self.assertTrue(False)
+
+        self.assertTrue(True)
+
+    def test_execute_heap_sort_100k(self):
+        filename = "correct_100000.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_heap_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        list = fileline.split(',')
+        prev = float("-inf")
+        for item in list:
+            if prev <= float(item):
+                prev = float(item)
+            else:
+                self.assertTrue(False)
+
+        self.assertTrue(True)
+
+    def test_execute_heap_sort_1m(self):
+        filename = "correct_1M.txt"
+
+        tool = OrderTool()
+        tool.set_input_data(filename)
+        tool.execute_heap_sort()
+        tool.set_output_data("correct2.txt")
+
+        file = open("correct2.txt", "r")
+        fileline = file.readline()
+        file.close()
+
+        os.remove("correct2.txt")
+
+        list = fileline.split(',')
+        prev = float("-inf")
+        for item in list:
+            if prev <= float(item):
+                prev = float(item)
+            else:
+                self.assertTrue(False)
+
+        self.assertTrue(True)
+
 
 if __name__ == '__main__':
     unittest.main()
