@@ -1,9 +1,19 @@
 import copy
+import datetime
+
 
 class OrderTool:
     def __init__(self):
         self.list = []
         self.initial_list = []
+
+        self.heapList = [0]
+        self.currentSize = 0
+
+        self.number_of_records = 0
+        self.time_consumed = 0
+        self.start_time = 0
+        self.end_time = 0
 
     @staticmethod
     def is_value_num(value):
@@ -53,13 +63,24 @@ class OrderTool:
         finally:
             file.close()
 
+    def reset_statics(self):
+        self.number_of_records = 0
+        self.time_consumed = 0
+        self.start_time = 0
+        self.end_time = 0
+
     def execute_merge_sort(self):
+        self.reset_statics()
+
         if len(self.initial_list) == 0 and len(self.list) > 0:
             self.initial_list = copy.deepcopy(self.list)
         elif len(self.initial_list) == 0 and len(self.list) == 0:
             raise EOFError("input data not set yet")
 
+        self.start_time = datetime.datetime.now()
         self.merge_sort(self.list)
+        self.end_time = datetime.datetime.now()
+        self.time_consumed = (self.end_time - self.start_time).seconds
 
     def merge_sort(self, alist):
         if len(alist) > 1:
@@ -77,22 +98,152 @@ class OrderTool:
                 if left_half[i] < right_half[j]:
                     alist[k] = left_half[i]
                     i += 1
+                    self.number_of_records += 1
                 else:
                     alist[k] = right_half[j]
                     j += 1
+                    self.number_of_records += 1
                 k += 1
 
             while i < len(left_half):
                 alist[k] = left_half[i]
                 i += 1
                 k += 1
+                self.number_of_records += 1
 
             while j < len(right_half):
                 alist[k] = right_half[j]
                 j += 1
                 k += 1
+                self.number_of_records += 1
 
         return alist
+
+    def execute_quick_sort(self):
+        self.reset_statics()
+
+        if len(self.initial_list) == 0 and len(self.list) > 0:
+            self.initial_list = copy.deepcopy(self.list)
+        elif len(self.initial_list) == 0 and len(self.list) == 0:
+            raise EOFError("input data not set yet")
+
+        self.start_time = datetime.datetime.now()
+        self.quick_sort_helper(self.list, 0, len(self.list) - 1)
+        self.end_time = datetime.datetime.now()
+        self.time_consumed = (self.end_time - self.start_time).seconds
+
+    def quick_sort_helper(self, alist, first, last):
+        if first < last:
+            splitpoint = self.partition(alist, first, last)
+
+            self.quick_sort_helper(alist, first, splitpoint - 1)
+            self.quick_sort_helper(alist, splitpoint + 1, last)
+
+    def partition(self, alist, first, last):
+        pivotvalue = alist[first]
+
+        leftmark = first + 1
+        rightmark = last
+
+        done = False
+        while not done:
+
+            while leftmark <= rightmark and alist[leftmark] <= pivotvalue:
+                leftmark = leftmark + 1
+
+            while alist[rightmark] >= pivotvalue and rightmark >= leftmark:
+                rightmark = rightmark - 1
+
+            if rightmark < leftmark:
+                done = True
+            else:
+                temp = alist[leftmark]
+                alist[leftmark] = alist[rightmark]
+                alist[rightmark] = temp
+                self.number_of_records += 2
+
+        temp = alist[first]
+        alist[first] = alist[rightmark]
+        alist[rightmark] = temp
+        self.number_of_records += 2
+
+        return rightmark
+
+    def percUp(self, i):
+        while i // 2 > 0:
+            if self.heapList[i] < self.heapList[i // 2]:
+                tmp = self.heapList[i // 2]
+                self.heapList[i // 2] = self.heapList[i]
+                self.heapList[i] = tmp
+            i = i // 2
+
+    def insert(self, k):
+        self.heapList.append(k)
+        self.currentSize = self.currentSize + 1
+        self.percUp(self.currentSize)
+
+    def percDown(self, i):
+        while (i * 2) <= self.currentSize:
+            mc = self.minChild(i)
+            if self.heapList[i] > self.heapList[mc]:
+                tmp = self.heapList[i]
+                self.heapList[i] = self.heapList[mc]
+                self.heapList[mc] = tmp
+                self.number_of_records += 2
+            i = mc
+
+    def minChild(self, i):
+        if i * 2 + 1 > self.currentSize:
+            return i * 2
+        else:
+            if self.heapList[i * 2] < self.heapList[i * 2 + 1]:
+                return i * 2
+            else:
+                return i * 2 + 1
+
+    def delMin(self):
+        retval = self.heapList[1]
+        self.heapList[1] = self.heapList[self.currentSize]
+        self.currentSize = self.currentSize - 1
+        self.heapList.pop()
+        self.percDown(1)
+        return retval
+
+    def buildHeap(self, alist):
+        i = len(alist) // 2
+        self.currentSize = len(alist)
+        self.heapList = [0] + alist[:]
+        while (i > 0):
+            self.percDown(i)
+            i = i - 1
+
+    def execute_heap_sort(self):
+        self.reset_statics()
+
+        if len(self.initial_list) == 0 and len(self.list) > 0:
+            self.initial_list = copy.deepcopy(self.list)
+        elif len(self.initial_list) == 0 and len(self.list) == 0:
+            raise EOFError("input data not set yet")
+
+        self.start_time = datetime.datetime.now()
+        self.buildHeap(self.list)
+        self.list = []
+        while self.currentSize > 0:
+            self.list.append(self.delMin())
+        self.end_time = datetime.datetime.now()
+        self.time_consumed = (self.end_time - self.start_time).seconds
+
+    def get_performance_data(self):
+        if self.start_time == 0:
+            raise EOFError("sort has not been executed")
+
+        statics_list = []
+        statics_list.append(self.number_of_records)
+        statics_list.append(self.time_consumed)
+        statics_list.append(self.start_time)
+        statics_list.append(self.end_time)
+
+        return statics_list
 
 
 if __name__ == '__main__':
@@ -102,3 +253,8 @@ if __name__ == '__main__':
 
     print(o.list)
     print(o.list_val())
+
+    o.execute_heap_sort()
+    print(o.list_val())
+
+    print(o.get_performance_data())
